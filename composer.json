@@ -1,11 +1,10 @@
 {
-    "name": "tridungpham/chatwing-api-library",
+    "name": "chatwing/api",
     "type": "library",
     "description": "PHP Library used to interact with Chatwing API",
     "keywords": ["Chatwing", "API"],
     "homepage": "http://chatwing.com",
     "license": "MIT",
-    "require": {},
     "authors": [
         {
             "name": "Tri Dung Pham",

@@ -13,6 +13,11 @@
     ],
     "require": {},
     "autoload": {
-        "psr-0": {"Chatwing": "src/"}
+        "psr-0": {
+            "Chatwing": "src/"
+        },
+        "files": [
+            "src/config/actions.php"
+        ]
     }
 }

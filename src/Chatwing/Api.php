@@ -48,6 +48,7 @@ class Api extends Object
      * @param string $actionName
      * @param array  $params
      *
+     * @throws Exception\ChatwingException
      * @return \Chatwing\Api\Response
      */
     public function call($actionName, $params = array())
@@ -66,7 +67,7 @@ class Api extends Object
         }
 
         if($responseStatus != 200){
-            throw new \Chatwing\Exception\ApiException($result, $responseStatus);
+            throw new \Chatwing\Exception\ChatwingException($result, $responseStatus);
         }
         
         $response = new \Chatwing\Api\Response($result);

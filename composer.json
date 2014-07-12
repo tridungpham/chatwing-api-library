@@ -15,6 +15,6 @@
     "autoload": {
         "psr-0": {
             "Chatwing": "src/"
-        },
+        }
     }
 }

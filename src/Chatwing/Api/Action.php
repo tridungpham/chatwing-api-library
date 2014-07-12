@@ -7,6 +7,7 @@ namespace Chatwing\Api;
 
 use \Chatwing\Object;
 use \Chatwing\Exception;
+
 //use \Chatwing\Exception\ChatwingException;
 
 class Action extends Object
@@ -57,14 +58,14 @@ class Action extends Object
         if (file_exists($path)) {
             self::$actionList = include $path;
         } else {
-            throw new \Chatwing\Exception\ChatwingException("Action list not found");
+            throw new \Chatwing\Exception\ChatwingException(array('message' => "Action list not found", 'code' => 0));
         }
     }
 
     private function _setCurrent($actionName)
     {
         if (!$this->isActionValid($actionName)) {
-            throw new \Chatwing\Exception\ChatwingException("Invalid action");
+            throw new \Chatwing\Exception\ChatwingException(array('message' => "Invalid action", 'code' => 0));
         }
         $this->setName($actionName);
         foreach (self::$actionList[$actionName] as $key => $value) {

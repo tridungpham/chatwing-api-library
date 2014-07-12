@@ -14,7 +14,7 @@ class Object
 
     public function setData($key, $value = null)
     {
-        if(is_array($key)) {
+        if (is_array($key)) {
             $this->_data = array_merge($this->_data, $key);
         } else {
             $this->_data[$key] = $value;
@@ -39,12 +39,13 @@ class Object
                 $this->getData($key, isset($argument[0]) ? $argument[0] : null);
                 break;
         }
-        throw new ChatwingException("Method not found");
+        throw new ChatwingException(array('message' => "Method not found"));
     }
 
     /**
-     * Convert from camelcase string to underscore lowercase string
+     * Convert from camel-case string to underscore lowercase string
      * Eg: CamelCase => camel_case
+     *
      * @param $str string
      *
      * @return mixed

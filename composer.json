@@ -16,8 +16,5 @@
         "psr-0": {
             "Chatwing": "src/"
         },
-        "files": [
-            "src/config/actions.php"
-        ]
     }
 }

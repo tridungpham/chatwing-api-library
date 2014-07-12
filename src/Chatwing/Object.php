@@ -6,6 +6,8 @@
 
 namespace Chatwing;
 
+use \Chatwing\Exception\ChatwingException;
+
 class Object
 {
     protected $_data = array();
@@ -37,7 +39,7 @@ class Object
                 $this->getData($key, isset($argument[0]) ? $argument[0] : null);
                 break;
         }
-        throw new \Chatwing\Exception("Method not found");
+        throw new ChatwingException("Method not found");
     }
 
     /**

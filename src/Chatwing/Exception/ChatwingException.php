@@ -4,9 +4,9 @@
  * @package Chatwing_Exception
  */
 
-namespace Chatwing;
+namespace Chatwing\Exception;
 
-class Exception extends \Exception
+class ChatwingException extends \Exception
 {
 
 } 

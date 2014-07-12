@@ -55,17 +55,6 @@ class Api extends Object
         // create action object. if action doesn't exist, 
         // then it throw an exception
         $action = new \Chatwing\Api\Action($actionName, $params);
-        return $this->process($action);
-    }
-
-    /**
-     * @param Api\Action $action
-     *
-     * @throws Exception\ApiException
-     * @return \Chatwing\Api\Response
-     */
-    protected function process(\Chatwing\Api\Action $action)
-    {
         $curlHandler = $this->prepareConnection($action->getActionUri(), $action->getType());
 
         $result = curl_exec($curlHandler);

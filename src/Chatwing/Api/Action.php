@@ -24,7 +24,7 @@ class Action extends Object
      */
     public function __construct($name, $params = array())
     {
-        if (is_null(self::$actionList)) {
+        if (empty(self::$actionList)) {
             self::loadActionList();
         }
 

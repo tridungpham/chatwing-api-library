@@ -4,7 +4,7 @@
  * @author chatwing
  */
 return array(
-    'chatbox/list' => array(
+    'user/chatbox/list' => array(
         'type' => 'get'
     )
 );

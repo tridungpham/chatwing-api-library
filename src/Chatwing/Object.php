@@ -12,6 +12,13 @@ class Object
 {
     protected $_data = array();
 
+    public function __construct($data = array())
+    {
+        if(!empty($data)) {
+            $this->setData($data);
+        }
+    }
+
     public function setData($key, $value = null)
     {
         if (is_array($key)) {
@@ -38,8 +45,11 @@ class Object
                 $key = $this->_makeUnderscoreString(substr($name, 3));
                 $this->getData($key, isset($argument[0]) ? $argument[0] : null);
                 break;
+
+            default:
+                throw new ChatwingException(array('message' => "Method not found"));
         }
-        throw new ChatwingException(array('message' => "Method not found"));
+
     }
 
     /**

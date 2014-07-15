@@ -175,11 +175,14 @@ class Api extends Object
         $queryUrl = '';
         switch ($action->getType()) {
             case 'get':
-                $actionURI = $action->toQueryUri();
-                $queryUrl  = $this->getQueryUrl($actionURI);
+                $queryUrl  = $this->getQueryUrl($action->toQueryUri());
                 break;
 
             case 'post':
+                $params = array_merge($action->getParams(), array('access_token' => $this->accessToken, 'client_id' => $this->clientId));
+                $params = http_build_query($params);
+                curl_setopt($curlHandler, CURLOPT_POST, count($params));
+                curl_setopt($curlHandler, CURLOPT_POSTFIELDS, $params);
                 break;
 
             default:

@@ -14,7 +14,7 @@ class ChatwingException extends \Exception
     function __construct($errorData = array(), $httpCode = 0)
     {
         $message = isset($errorData['message']) ? $errorData['message'] : '';
-        $code = isset($errorData['code']) ? $errorData['code'] : '';
+        $code = isset($errorData['code']) ? $errorData['code'] : 0;
         parent::__construct($message, $code, null);
 
         if(isset($errorData['params'])){

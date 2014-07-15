@@ -6,10 +6,14 @@
 namespace Chatwing\Api;
 
 use \Chatwing\Object;
-use \Chatwing\Exception;
+use \Chatwing\Exception\ChatwingException;
 
-//use \Chatwing\Exception\ChatwingException;
-
+/**
+ * Class Action
+ *
+ * @package Chatwing\Api
+ * @method getType() string
+ */
 class Action extends Object
 {
     private static $actionList = array();
@@ -29,12 +33,12 @@ class Action extends Object
         }
 
         $this->_setCurrent($name);
-
+        $this->setData('params', $params);
     }
 
     public function toQueryUri()
     {
-
+        return $this->getActionUri() . ($this->getType() == 'get' ? '?' . http_build_query($this->getData('params', array())) : '') ;
     }
 
     public function getActionUri()
@@ -58,14 +62,14 @@ class Action extends Object
         if (file_exists($path)) {
             self::$actionList = include $path;
         } else {
-            throw new \Chatwing\Exception\ChatwingException(array('message' => "Action list not found", 'code' => 0));
+            throw new ChatwingException(array('message' => "Action list not found", 'code' => 0));
         }
     }
 
     private function _setCurrent($actionName)
     {
         if (!$this->isActionValid($actionName)) {
-            throw new \Chatwing\Exception\ChatwingException(array('message' => "Invalid action", 'code' => 0));
+            throw new ChatwingException(array('message' => "Invalid action", 'code' => 0));
         }
         $this->setName($actionName);
         foreach (self::$actionList[$actionName] as $key => $value) {

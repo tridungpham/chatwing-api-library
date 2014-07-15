@@ -43,7 +43,7 @@ class Object
 
             case 'get':
                 $key = $this->_makeUnderscoreString(substr($name, 3));
-                $this->getData($key, isset($argument[0]) ? $argument[0] : null);
+                return $this->getData($key, isset($argument[0]) ? $argument[0] : null);
                 break;
 
             default:

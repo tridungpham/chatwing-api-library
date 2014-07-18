@@ -36,6 +36,9 @@ class Api extends Object
     const ENV_DEVELOPMENT = 'development';
     const ENV_PRODUCTION  = 'production';
 
+    const CLIENT_JOOMLA = 'joomla';
+    const CLIENT_WORDPRESS = 'wordpress';
+
     // agent constant
     const REQUEST_AGENT = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0';
 
@@ -183,6 +186,7 @@ class Api extends Object
                 $params = http_build_query($params);
                 curl_setopt($curlHandler, CURLOPT_POST, count($params));
                 curl_setopt($curlHandler, CURLOPT_POSTFIELDS, $params);
+                $queryUrl = $this->getQueryUrl($action->toQueryUri(), false);
                 break;
 
             default:
@@ -194,6 +198,12 @@ class Api extends Object
         return $curlHandler;
     }
 
+    /**
+     * @param string $uri
+     * @param bool   $appendAuthentication
+     *
+     * @return string
+     */
     protected function getQueryUrl($uri = '', $appendAuthentication = true)
     {
         $queryUrl = $this->apiUrl . '/api/' . $this->apiVersion . '/' . $uri;

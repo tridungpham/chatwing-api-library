@@ -5,11 +5,10 @@
 
 namespace test;
 
+use Chatwing\Api;
+
 class ApiTest extends \PHPUnit_Framework_TestCase
 {
-    public function testAction()
-    {
-        $this->assertTrue(0,"not equal");
-    }
+
 }
  

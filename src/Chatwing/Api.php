@@ -14,6 +14,12 @@ define('CHATWING_BASE_DIR', dirname(__FILE__));
 
 class Api extends Object
 {
+    private static $instance = null;
+
+    /**
+     * SDK version
+     * @var int
+     */
     private $apiVersion = 1;
 
     // private information
@@ -42,7 +48,7 @@ class Api extends Object
     // agent constant
     const REQUEST_AGENT = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0';
 
-    public function __construct($accessToken, $clientId, $apiVersion = 1)
+    public function __construct($accessToken, $clientId, $apiVersion = 1, $isStatic = false)
     {
         $this->setAPIVersion($apiVersion);
         $this->accessToken = $accessToken;
@@ -53,6 +59,25 @@ class Api extends Object
         $this->setAgent(
                 "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0"
         ); // default user-agent
+        if($isStatic) {
+            self::$instance = $this;
+        }
+    }
+
+    /**
+     * Get API object
+     * @param string $token
+     * @param string $clientId
+     * @param int    $apiVersion
+     *
+     * @return Api|null
+     */
+    public static function getInstance($token = '', $clientId = '', $apiVersion = 1)
+    {
+        if(is_null(self::$instance)) {
+            self::$instance = new self($token, $clientId, $apiVersion);
+        }
+        return self::$instance;
     }
 
     /**

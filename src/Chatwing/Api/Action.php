@@ -1,6 +1,6 @@
 <?php
 /**
- * Author: dphamtri
+ * @author Chatwing <dev@chatwing.com>
  */
 
 namespace Chatwing\Api;

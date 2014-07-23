@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * @author Chatwing <dev@chatwing.com>
+ */
 namespace Chatwing\Api;
 
 use \Chatwing\Exception\ChatwingException;

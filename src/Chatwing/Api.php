@@ -18,6 +18,7 @@ class Api extends Object
 
     /**
      * SDK version
+     *
      * @var int
      */
     private $apiVersion = 1;
@@ -42,13 +43,10 @@ class Api extends Object
     const ENV_DEVELOPMENT = 'development';
     const ENV_PRODUCTION  = 'production';
 
-    const CLIENT_JOOMLA = 'joomla';
-    const CLIENT_WORDPRESS = 'wordpress';
-
     // agent constant
     const REQUEST_AGENT = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0';
 
-    public function __construct($accessToken, $clientId, $apiVersion = 1, $isStatic = false)
+    public function __construct($clientId, $accessToken = '', $apiVersion = 1, $isStatic = false)
     {
         $this->setAPIVersion($apiVersion);
         $this->accessToken = $accessToken;
@@ -59,23 +57,24 @@ class Api extends Object
         $this->setAgent(
                 "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0"
         ); // default user-agent
-        if($isStatic) {
+        if ($isStatic) {
             self::$instance = $this;
         }
     }
 
     /**
      * Get API object
+     *
      * @param string $token
      * @param string $clientId
      * @param int    $apiVersion
      *
      * @return Api|null
      */
-    public static function getInstance($token = '', $clientId = '', $apiVersion = 1)
+    public static function getInstance($clientId, $token = '', $apiVersion = 1)
     {
-        if(is_null(self::$instance)) {
-            self::$instance = new self($token, $clientId, $apiVersion);
+        if (is_null(self::$instance)) {
+            self::$instance = new self($clientId, $token, $apiVersion);
         }
         return self::$instance;
     }
@@ -169,6 +168,26 @@ class Api extends Object
     }
 
     /**
+     * Set the API access token
+     *
+     * @param $token
+     */
+    public function setAccessToken($token)
+    {
+        $this->accessToken = $token;
+    }
+
+    /**
+     * Get current API access token
+     *
+     * @return array|null
+     */
+    public function getAccessToken()
+    {
+        return $this->accessToken;
+    }
+
+    /**
      * Set API version
      *
      * @param int $version
@@ -203,11 +222,14 @@ class Api extends Object
         $queryUrl = '';
         switch ($action->getType()) {
             case 'get':
-                $queryUrl  = $this->getQueryUrl($action->toQueryUri());
+                $queryUrl = $this->getQueryUrl($action->toQueryUri());
                 break;
 
             case 'post':
-                $params = array_merge($action->getParams(), array('access_token' => $this->accessToken, 'client_id' => $this->clientId));
+                $params = array_merge(
+                        $action->getParams(),
+                        array('access_token' => $this->accessToken, 'client_id' => $this->clientId)
+                );
                 $params = http_build_query($params);
                 curl_setopt($curlHandler, CURLOPT_POST, count($params));
                 curl_setopt($curlHandler, CURLOPT_POSTFIELDS, $params);

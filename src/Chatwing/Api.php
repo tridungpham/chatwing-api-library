@@ -167,6 +167,11 @@ class Api extends Object
         return $this->getEnv() == self::ENV_PRODUCTION;
     }
 
+    public function getAPIServer()
+    {
+        return isset($this->apiDomains[$this->getEnv()]) ? $this->apiDomains[$this->getEnv()] : '';
+    }
+
     /**
      * Set the API access token
      *

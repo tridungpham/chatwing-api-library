@@ -10,8 +10,6 @@ use Chatwing\Api\Action;
 use Chatwing\Api\Response;
 use Chatwing\Exception\ChatwingException;
 
-define('CHATWING_BASE_DIR', dirname(__FILE__));
-
 class Api extends Object
 {
     private static $instance = null;
@@ -39,44 +37,17 @@ class Api extends Object
     private $environment = null;
     private $apiUrl = null;
 
-    // environment constant
-    const ENV_DEVELOPMENT = 'development';
-    const ENV_PRODUCTION  = 'production';
-
-    // agent constant
-    const REQUEST_AGENT = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0';
-
-    public function __construct($clientId, $accessToken = '', $apiVersion = 1, $isStatic = false)
+    public function __construct($clientId, $accessToken = '', $apiVersion = 1)
     {
         $this->setAPIVersion($apiVersion);
         $this->accessToken = $accessToken;
         $this->clientId    = $clientId;
 
-        $currentEnv = getenv('HTTP_CHATWING_ENV') ? getenv('HTTP_CHATWING_ENV') : self::ENV_PRODUCTION;
+        $currentEnv = getenv('HTTP_CHATWING_ENV') ? getenv('HTTP_CHATWING_ENV') : CW_ENV_PRODUCTION;
         $this->setEnv($currentEnv);
         $this->setAgent(
                 "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0"
         ); // default user-agent
-        if ($isStatic) {
-            self::$instance = $this;
-        }
-    }
-
-    /**
-     * Get API object
-     *
-     * @param string $token
-     * @param string $clientId
-     * @param int    $apiVersion
-     *
-     * @return Api|null
-     */
-    public static function getInstance($clientId, $token = '', $apiVersion = 1)
-    {
-        if (is_null(self::$instance)) {
-            self::$instance = new self($clientId, $token, $apiVersion);
-        }
-        return self::$instance;
     }
 
     /**
@@ -118,11 +89,8 @@ class Api extends Object
      *
      * @throws ChatwingException
      */
-    public function setEnv($env = \Chatwing\Api::ENV_PRODUCTION)
+    public function setEnv($env)
     {
-        if (!in_array($env, array(self::ENV_PRODUCTION, self::ENV_DEVELOPMENT))) {
-            throw new ChatwingException(array('message' => "Enviroment is not supported"));
-        }
         $this->environment = $env;
         $this->onEnvChange();
     }
@@ -154,7 +122,7 @@ class Api extends Object
      */
     public function isDevelopment()
     {
-        return $this->getEnv() == self::ENV_DEVELOPMENT;
+        return $this->getEnv() == CW_ENV_DEVELOPMENT;
     }
 
     /**
@@ -164,7 +132,7 @@ class Api extends Object
      */
     public function isProduction()
     {
-        return $this->getEnv() == self::ENV_PRODUCTION;
+        return $this->getEnv() == CW_ENV_PRODUCTION;
     }
 
     public function getAPIServer()

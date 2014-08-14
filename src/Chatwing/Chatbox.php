@@ -6,10 +6,21 @@
 
 namespace Chatwing;
 
-class Chatbox
+class Chatbox extends Object
 {
+    protected $api;
     protected $key = null;
     protected $alias = null;
+
+    public function __construct(Api $api)
+    {
+        $this->api = $api;
+    }
+
+    public function getChatboxUrl()
+    {
+
+    }
 
     public function setKey($key)
     {

@@ -17,6 +17,9 @@
     "autoload": {
         "psr-0": {
             "Chatwing": "src/"
-        }
+        },
+        "files":[
+            "src/Chatwing/start.php"
+        ]
     }
 }

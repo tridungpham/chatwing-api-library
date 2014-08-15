@@ -69,4 +69,9 @@ class Chatbox extends Object
             $this->params[$key] = $value;
         }
     }
+
+    public function getParams()
+    {
+        return $this->params;
+    }
 } 

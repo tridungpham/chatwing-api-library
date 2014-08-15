@@ -8,6 +8,7 @@
 namespace Chatwing;
 
 use Chatwing\Encryption\Session;
+use Chatwing\Exception\ChatwingException;
 
 class Chatbox extends Object
 {
@@ -24,9 +25,18 @@ class Chatbox extends Object
         $this->api = $api;
     }
 
+    /**
+     * [getChatboxUrl description]
+     * @return [type] [description]
+     */
     public function getChatboxUrl()
     {
-        $chatboxUrl = $this->api->getAPIServer() . '/' . $this->getKey();
+        $chatboxName = $this->getAlias() ? $this->getAlias() : $this->getKey();
+        if(!$chatboxName) {
+            throw new ChatwingException(array('message' => 'No chatbox key or alias defined!'));
+        }
+
+        $chatboxUrl = $this->api->getAPIServer() . '/' . $chatboxName;
         if (!empty($this->params)) {
             if (isset($this->params['custom_session']) && is_array($this->params['custom_session'])) {
                 // build custom session here ?
@@ -39,26 +49,47 @@ class Chatbox extends Object
         return $chatboxUrl;
     }
 
+    /**
+     * [setKey description]
+     * @param [type] $key [description]
+     */
     public function setKey($key)
     {
         $this->key = $key;
     }
 
+    /**
+     * [getKey description]
+     * @return [type] [description]
+     */
     public function getKey()
     {
         return $this->key;
     }
 
+    /**
+     * [setAlias description]
+     * @param [type] $alias [description]
+     */
     public function setAlias($alias)
     {
         $this->alias = $alias;
     }
 
+    /**
+     * [getAlias description]
+     * @return [type] [description]
+     */
     public function getAlias()
     {
         return $this->alias;
     }
 
+    /**
+     * [setParam description]
+     * @param [type] $key   [description]
+     * @param string $value [description]
+     */
     public function setParam($key, $value = '')
     {
         if(is_array($key)) {
@@ -70,6 +101,10 @@ class Chatbox extends Object
         }
     }
 
+    /**
+     * [getParams description]
+     * @return [type] [description]
+     */
     public function getParams()
     {
         return $this->params;

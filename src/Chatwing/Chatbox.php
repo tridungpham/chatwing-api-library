@@ -27,8 +27,8 @@ class Chatbox extends Object
 
     /**
      * [getChatboxUrl description]
-     * @throws \Chatwing\Exception\ChatwingException If no alias or chatbox key is set
-     * @return [type] [description]
+     * @throws Exception\ChatwingException If no alias or chatbox key is set
+     * @return string
      */
     public function getChatboxUrl()
     {
@@ -39,7 +39,7 @@ class Chatbox extends Object
 
         $chatboxUrl = 'http://' . $this->api->getAPIServer() . '/' . $chatboxName;
         if (!empty($this->params)) {
-            if (isset($this->params['custom_session']) && is_array($this->params['custom_session'])) {
+            if (isset($this->params['custom_session']) && is_array($this->params['custom_session']) && isset($this->params['custom_session']['secret'])) {
                 // build custom session here ?
                 $session = new Session($this->params['custom_session']['secret']);
                 unset($this->params['custom_session']['secret']);

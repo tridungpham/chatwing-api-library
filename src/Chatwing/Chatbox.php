@@ -19,6 +19,7 @@ class Chatbox extends Object
     protected $key = null;
     protected $alias = null;
     protected $params = array();
+    protected $secret = null;
 
     public function __construct(Api $api)
     {
@@ -39,10 +40,12 @@ class Chatbox extends Object
 
         $chatboxUrl = 'http://' . $this->api->getAPIServer() . '/' . $chatboxName;
         if (!empty($this->params)) {
-            if (isset($this->params['custom_session']) && is_array($this->params['custom_session']) && isset($this->params['custom_session']['secret'])) {
+            if ($this->getSecret()
+                    && isset($this->params['custom_session'])
+                    && !empty($this->params['custom_session'])) {
                 // build custom session here ?
-                $session = new Session($this->params['custom_session']['secret']);
-                unset($this->params['custom_session']['secret']);
+                $session = new Session($this->getSecret());
+                $session->setData($this->params['custom_session']);
                 $this->params['custom_session'] = $session->toEncryptedSession();
             }
             $chatboxUrl .= '?' . http_build_query($this->params);
@@ -104,10 +107,21 @@ class Chatbox extends Object
 
     /**
      * [getParams description]
-     * @return [type] [description]
+     *
+     * @return array [type] [description]
      */
     public function getParams()
     {
         return $this->params;
+    }
+
+    public function setSecret($s)
+    {
+        $this->secret = $s;
+    }
+
+    public function getSecret()
+    {
+        return $this->secret;
     }
 } 

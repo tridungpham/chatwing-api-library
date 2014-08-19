@@ -28,27 +28,20 @@ class Chatbox extends Object
 
     /**
      * [getChatboxUrl description]
+     *
      * @throws Exception\ChatwingException If no alias or chatbox key is set
      * @return string
      */
     public function getChatboxUrl()
     {
         $chatboxName = $this->getAlias() ? $this->getAlias() : $this->getKey();
-        if(!$chatboxName) {
+        if (!$chatboxName) {
             throw new ChatwingException(array('message' => 'No chatbox key or alias defined!'));
         }
 
         $chatboxUrl = 'http://' . $this->api->getAPIServer() . '/' . $chatboxName;
         if (!empty($this->params)) {
-            if ($this->getSecret()
-                    && isset($this->params['custom_session'])
-                    && is_array($this->params['custom_session'])
-                    && !empty($this->params['custom_session'])) {
-                // build custom session here ?
-                $session = new Session($this->getSecret());
-                $session->setData($this->params['custom_session']);
-                $this->params['custom_session'] = $session->toEncryptedSession();
-            }
+            $this->getEncryptedSession(); // call this method to create encrypted session
             $chatboxUrl .= '?' . http_build_query($this->params);
         }
         return $chatboxUrl;
@@ -56,6 +49,7 @@ class Chatbox extends Object
 
     /**
      * [setKey description]
+     *
      * @param [type] $key [description]
      */
     public function setKey($key)
@@ -65,6 +59,7 @@ class Chatbox extends Object
 
     /**
      * [getKey description]
+     *
      * @return [type] [description]
      */
     public function getKey()
@@ -74,6 +69,7 @@ class Chatbox extends Object
 
     /**
      * [setAlias description]
+     *
      * @param [type] $alias [description]
      */
     public function setAlias($alias)
@@ -83,6 +79,7 @@ class Chatbox extends Object
 
     /**
      * [getAlias description]
+     *
      * @return [type] [description]
      */
     public function getAlias()
@@ -92,18 +89,27 @@ class Chatbox extends Object
 
     /**
      * [setParam description]
+     *
      * @param [type] $key   [description]
      * @param string $value [description]
      */
     public function setParam($key, $value = '')
     {
-        if(is_array($key)) {
-            foreach($key as $k => $v) {
+        if (is_array($key)) {
+            foreach ($key as $k => $v) {
                 $this->setParam($k, $v);
             }
         } else {
             $this->params[$key] = $value;
         }
+    }
+
+    public function getParam($key = '', $default = null)
+    {
+        if(empty($key)) {
+            return $this->params;
+        }
+        return isset($this->params[$key]) ? $this->params[$key] : $default;
     }
 
     /**
@@ -124,5 +130,25 @@ class Chatbox extends Object
     public function getSecret()
     {
         return $this->secret;
+    }
+
+    public function getEncryptedSession()
+    {
+        if (isset($this->params['custom_session'])) {
+            $customSession = $this->params['custom_session'];
+            if (is_string($customSession)) {
+                return $customSession;
+            }
+
+            if (is_array($customSession) && !empty($customSession) && $this->getSecret()) {
+                $session = new Session($this->getSecret());
+                $session->setData($customSession);
+                $this->setParam('custom_session', $session->toEncryptedSession());
+            }
+
+            return $this->getParam('custom_session');
+        }
+
+        return false;
     }
 } 

@@ -42,6 +42,7 @@ class Chatbox extends Object
         if (!empty($this->params)) {
             if ($this->getSecret()
                     && isset($this->params['custom_session'])
+                    && is_array($this->params['custom_session'])
                     && !empty($this->params['custom_session'])) {
                 // build custom session here ?
                 $session = new Session($this->getSecret());

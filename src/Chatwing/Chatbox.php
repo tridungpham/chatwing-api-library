@@ -144,9 +144,11 @@ class Chatbox extends Object
                 $session = new Session($this->getSecret());
                 $session->setData($customSession);
                 $this->setParam('custom_session', $session->toEncryptedSession());
+
+                return $this->getParam('custom_session');
             }
 
-            return $this->getParam('custom_session');
+            unset($this->params['custom_session']);
         }
 
         return false;

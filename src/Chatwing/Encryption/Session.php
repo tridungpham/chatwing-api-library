@@ -7,6 +7,7 @@
 namespace Chatwing\Encryption;
 
 use Chatwing\Object;
+use Chatwing\Exception\ChatwingException;
 
 class Session extends Object
 {
@@ -14,9 +15,11 @@ class Session extends Object
 
     const BLOCK_SIZE = 16;
 
-    public function __construct($secret)
+    public function __construct($secret = '')
     {
-        $this->setSecret($secret);
+        if($secret) {
+            $this->setSecret($secret);
+        }
     }
 
     public function setSecret($str)
@@ -31,6 +34,10 @@ class Session extends Object
 
     protected  function getKeyAndIv()
     {
+        $secret = $this->getSecret();
+        if(!$secret) {
+            throw new ChatwingException(array('message' => 'Secret has not been set !!'));
+        }
         $md5Secret     = md5($this->getSecret());
         $encryptionKey = substr($md5Secret, 0, 16);
         $iv            = substr($md5Secret, 16, 16);

@@ -41,7 +41,9 @@ class Chatbox extends Object
 
         $chatboxUrl = 'http://' . $this->api->getAPIServer() . '/' . $chatboxName;
         if (!empty($this->params)) {
-            $this->getEncryptedSession(); // call this method to create encrypted session
+            if($this->getSecret()) {
+                $this->getEncryptedSession(); // call this method to create encrypted session
+            }
             $chatboxUrl .= '?' . http_build_query($this->params);
         }
         return $chatboxUrl;
@@ -51,10 +53,13 @@ class Chatbox extends Object
      * [setKey description]
      *
      * @param [type] $key [description]
+     *
+     * @return $this
      */
     public function setKey($key)
     {
         $this->key = $key;
+        return $this;
     }
 
     /**
@@ -71,10 +76,13 @@ class Chatbox extends Object
      * [setAlias description]
      *
      * @param [type] $alias [description]
+     *
+     * @return $this
      */
     public function setAlias($alias)
     {
         $this->alias = $alias;
+        return $this;
     }
 
     /**
@@ -92,6 +100,8 @@ class Chatbox extends Object
      *
      * @param [type] $key   [description]
      * @param string $value [description]
+     *
+     * @return $this
      */
     public function setParam($key, $value = '')
     {
@@ -102,6 +112,7 @@ class Chatbox extends Object
         } else {
             $this->params[$key] = $value;
         }
+        return $this;
     }
 
     public function getParam($key = '', $default = null)
@@ -122,9 +133,16 @@ class Chatbox extends Object
         return $this->params;
     }
 
+    /**
+     * Set chatbox secret key
+     * @param $s
+     *
+     * @return $this
+     */
     public function setSecret($s)
     {
         $this->secret = $s;
+        return $this;
     }
 
     public function getSecret()
@@ -141,7 +159,8 @@ class Chatbox extends Object
             }
 
             if (is_array($customSession) && !empty($customSession) && $this->getSecret()) {
-                $session = new Session($this->getSecret());
+                $session = new Session();
+                $session->setSecret($this->getSecret());
                 $session->setData($customSession);
                 $this->setParam('custom_session', $session->toEncryptedSession());
 

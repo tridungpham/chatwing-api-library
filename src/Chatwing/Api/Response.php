@@ -1,6 +1,7 @@
 <?php
 /**
- * @author Chatwing <dev@chatwing.com>
+ * @author chatwing
+ * @package Chatwing_SDK
  */
 namespace Chatwing\Api;
 

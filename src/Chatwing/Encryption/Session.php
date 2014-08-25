@@ -1,7 +1,7 @@
 <?php
 /**
  * @author chatwing
- * @package
+ * @package Chatwing_SDK
  */
 
 namespace Chatwing\Encryption;
@@ -25,6 +25,7 @@ class Session extends Object
     public function setSecret($str)
     {
         $this->secret = $str;
+        return $this;
     }
 
     public function getSecret()
@@ -32,6 +33,10 @@ class Session extends Object
         return $this->secret;
     }
 
+    /**
+     * @return array
+     * @throws \Chatwing\Exception\ChatwingException
+     */
     protected  function getKeyAndIv()
     {
         $secret = $this->getSecret();
@@ -44,24 +49,32 @@ class Session extends Object
         return array($encryptionKey, $iv);
     }
 
+    /**
+     * @return string
+     */
     public function toEncryptedSession()
     {
+        list($encryptionKey, $iv) = $this->getKeyAndIv();
         $data = json_encode($this->_data);
         $pad  = self::BLOCK_SIZE - (strlen($data) % self::BLOCK_SIZE);
         $data .= str_repeat(chr($pad), $pad);
 
-        list($encryptionKey, $iv) = $this->getKeyAndIv();
         return $encryptedSession = bin2hex(mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $encryptionKey, $data, MCRYPT_MODE_CBC, $iv));
     }
 
+    /**
+     * @param string $encryptedSession
+     *
+     * @return array|mixed
+     */
     public function toOriginalData($encryptedSession = '')
     {
+        list($encryptionKey, $iv) = $this->getKeyAndIv();
         $result = array();
         if(!$encryptedSession) {
             return $result;
         }
 
-        list($encryptionKey, $iv) = $this->getKeyAndIv();
         $data = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $encryptionKey, hex2bin($encryptedSession), MCRYPT_MODE_CBC, $iv);
         return json_decode(trim($data), true);
     }

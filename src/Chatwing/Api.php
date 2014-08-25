@@ -87,12 +87,14 @@ class Api extends Object
      *
      * @param string $env
      *
+     * @return $this
      * @throws ChatwingException
      */
     public function setEnv($env)
     {
         $this->environment = $env;
         $this->onEnvChange();
+        return $this;
     }
 
     /**
@@ -144,10 +146,13 @@ class Api extends Object
      * Set the API access token
      *
      * @param $token
+     *
+     * @return $this
      */
     public function setAccessToken($token)
     {
         $this->accessToken = $token;
+        return $this;
     }
 
     /**
@@ -164,10 +169,13 @@ class Api extends Object
      * Set API version
      *
      * @param int $version
+     *
+     * @return $this
      */
     public function setAPIVersion($version = 1)
     {
         $this->apiVersion = $version;
+        return $this;
     }
 
     /**
